@@ -1,15 +1,13 @@
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
-  name: webapps.apps.mycompany.com
+  name: simpleconfigs.config.example.com
 spec:
-  group: apps.mycompany.com
+  group: config.example.com
   names:
-    plural: webapps
-    singular: webapp
-    kind: WebApp
-    shortNames:
-      - wa
+    plural: simpleconfigs
+    singular: simpleconfig
+    kind: SimpleConfig
   scope: Namespaced
   versions:
     - name: v1alpha1
@@ -22,17 +20,16 @@ spec:
             spec:
               type: object
               properties:
-                replicas:
-                  type: integer
-                  minimum: 1
-                image:
-                  type: string
-                port:
-                  type: integer
+                data:
+                  type: object
+                  additionalProperties:
+                    type: string
             status:
               type: object
               properties:
-                availableReplicas:
-                  type: integer
+                configMapName:
+                  type: string
+                synced:
+                  type: boolean
       subresources:
         status: {}

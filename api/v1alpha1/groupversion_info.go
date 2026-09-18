@@ -8,7 +8,7 @@ import (
 
 // GroupVersion is group version used to register these objects
 var (
-	GroupVersion = schema.GroupVersion{Group: "apps.mycompany.com", Version: "v1alpha1"}
+	GroupVersion = schema.GroupVersion{Group: "config.example.com", Version: "v1alpha1"}
 	SchemeBuilder = runtime.NewSchemeBuilder(addKnownTypes)
 	AddToScheme = SchemeBuilder.AddToScheme
 )
@@ -16,8 +16,8 @@ var (
 // Add the list of known types to Scheme
 func addKnownTypes(s *runtime.Scheme) error {
 	s.AddKnownTypes(GroupVersion,
-		&WebApp{},
-		&WebAppList{},
+		&SimpleConfig{},
+		&SimpleConfigList{},
 	)
 	metav1.AddToGroupVersion(s, GroupVersion)
 	return nil

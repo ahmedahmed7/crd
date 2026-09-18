@@ -1,4 +1,61 @@
-# WebApp Operator — Exemple pédagogique (Go)
+# SimpleConfig Operator — Très simple exemple (Go)
+
+Objectif
+--------
+Ce projet illustre un opérateur Kubernetes minimal et pédagogique. Il montre comment définir un CRD "SimpleConfig" (group: config.example.com) et un controller très simple qui transforme la Spec du CR en un ConfigMap Kubernetes.
+
+Cas réel et utile :
+- Permet à une équipe de stocker des configurations applicatives dans des Custom Resources (ex: config déclarative dans Git) et laisser l'opérateur créer/mettre à jour un ConfigMap que les pods consomment.
+
+Fichiers importants
+-------------------
+- go.mod — module et dépendances
+- main.go — démarre le manager controller-runtime
+- api/v1alpha1/groupversion_info.go — enregistre le GroupVersion
+- api/v1alpha1/webapp_types.go — définit SimpleConfig (Spec: data map, Status: configMapName + synced)
+- controllers/webapp_controller.go — logique minimale : crée/maintient un ConfigMap avec les données de spec
+- config/crd/bases/apps.mycompany.com_webapps.yaml — CRD à appliquer (fichier remplacé par SimpleConfig CRD)
+- config/samples/apps_v1alpha1_webapp.yaml — exemple de CR
+
+Comment utiliser
+----------------
+Prérequis : Go, kubectl et un cluster accessible (minikube/kind).
+
+1) Installer les dépendances :
+   cd <repo>/crd
+   go mod tidy
+
+2) Appliquer la CRD :
+   kubectl apply -f config/crd/bases/apps.mycompany.com_webapps.yaml
+
+3) Lancer l'opérateur localement :
+   go run main.go
+
+4) Créer un SimpleConfig :
+   kubectl apply -f config/samples/apps_v1alpha1_webapp.yaml
+
+5) Vérifier :
+   kubectl get simpleconfig -A
+   kubectl get configmap example-config-cm -n default -o yaml
+
+Explication simple du controller
+--------------------------------
+- Lorsqu'un SimpleConfig est créé, le controller crée un ConfigMap nommé <simpleconfig-name>-cm contenant les paires key/value spécifiées dans spec.data.
+- Si le SimpleConfig est mis à jour, l'opérateur met à jour le ConfigMap pour refléter spec.data.
+- Le controller met à jour status.configMapName et status.synced pour indiquer que l'objet est appliqué.
+
+Pourquoi c'est simple et pédagogique
+----------------------------------
+- Le controller ne gère qu'une seule ressource Kubernetes (ConfigMap) et transforme directement spec -> ConfigMap.
+- Pas de Deployment/Service, pas de logique complexe : idéal pour comprendre le pattern reconcile.
+
+Prochaines étapes possibles
+--------------------------
+- Ajouter tests unitaires avec fake client.
+- Ajouter RBAC manifests et déployer l'opérateur en cluster.
+- Étendre pour générer Secrets (chiffrés) ou gérer versioning.
+
+
 
 Objectif
 --------

@@ -1,4 +1,4 @@
-module github.com/you/webapp-operator
+module github.com/example/simple-operator
 
 go 1.20
 

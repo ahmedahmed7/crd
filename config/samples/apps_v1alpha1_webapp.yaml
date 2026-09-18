@@ -1,9 +1,11 @@
-apiVersion: apps.mycompany.com/v1alpha1
-kind: WebApp
+apiVersion: config.example.com/v1alpha1
+kind: SimpleConfig
 metadata:
-  name: example-webapp
+  name: example-config
   namespace: default
 spec:
-  replicas: 2
-  image: nginx:1.25
-  port: 80
+  data:
+    config.yaml: |
+      server: "0.0.0.0"
+      port: 8080
+    greeting: "Bonjour"

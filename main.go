@@ -4,15 +4,14 @@ import (
 	"flag"
 	"os"
 
-	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	webappv1alpha1 "github.com/you/webapp-operator/api/v1alpha1"
-	"github.com/you/webapp-operator/controllers"
+	examplev1 "github.com/example/simple-operator/api/v1alpha1"
+	"github.com/example/simple-operator/controllers"
 )
 
 var (
@@ -20,9 +19,8 @@ var (
 )
 
 func init() {
-	utilruntime.Must(appsv1.AddToScheme(scheme))
 	utilruntime.Must(corev1.AddToScheme(scheme))
-	utilruntime.Must(webappv1alpha1.AddToScheme(scheme))
+	utilruntime.Must(examplev1.AddToScheme(scheme))
 }
 
 func main() {
@@ -41,11 +39,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err = (&controllers.WebAppReconciler{
+	if err = (&controllers.SimpleConfigReconciler{
 		Client: mgr.GetClient(),
 		Scheme: mgr.GetScheme(),
 	}).SetupWithManager(mgr); err != nil {
-		ctrl.Log.Error(err, "unable to create controller", "controller", "WebApp")
+		ctrl.Log.Error(err, "unable to create controller", "controller", "SimpleConfig")
 		os.Exit(1)
 	}
 
