@@ -1,0 +1,10 @@
+apiVersion: config.example.com/v1alpha1
+kind: CVFavorite
+metadata:
+  name: example-fav
+  namespace: default
+spec:
+  serviceURL: "http://favorites.default.svc.cluster.local:8080"
+  cvId: "cv-1234"
+  userId: "user-42"
+  action: "add"

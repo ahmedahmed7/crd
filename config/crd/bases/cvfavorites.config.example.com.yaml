@@ -1,0 +1,42 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: cvfavorites.config.example.com
+spec:
+  group: config.example.com
+  names:
+    plural: cvfavorites
+    singular: cvfavorite
+    kind: CVFavorite
+    shortNames:
+      - cvf
+  scope: Namespaced
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                serviceURL:
+                  type: string
+                cvId:
+                  type: string
+                userId:
+                  type: string
+                action:
+                  type: string
+                  enum: ["add", "remove"]
+            status:
+              type: object
+              properties:
+                synced:
+                  type: boolean
+                message:
+                  type: string
+      subresources:
+        status: {}

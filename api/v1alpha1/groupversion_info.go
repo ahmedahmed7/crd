@@ -18,6 +18,8 @@ func addKnownTypes(s *runtime.Scheme) error {
 	s.AddKnownTypes(GroupVersion,
 		&SimpleConfig{},
 		&SimpleConfigList{},
+		&CVFavorite{},
+		&CVFavoriteList{},
 	)
 	metav1.AddToGroupVersion(s, GroupVersion)
 	return nil
